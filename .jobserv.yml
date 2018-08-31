@@ -1,0 +1,28 @@
+timeout: 5
+triggers:
+  - name: merge-request
+    type: gitlab_mr
+    runs:
+      - name: unit-test
+        container: python:3.5-alpine
+        host-tag: amd64
+        script: unit-test
+
+  - name: post-merge
+    type: git_poller
+    params:
+      GIT_URL: "https://git.foundries.io/development/microplatforms/common/mp-containers"
+      GIT_POLL_REFS: "refs/heads/master"
+    runs:
+      - name: deploy
+        container: python:3.5-alpine
+        host-tag: amd64
+        script: unit-test
+    email:
+      users: 'andy@foundries.io'
+
+scripts:
+  unit-test: |
+    #!/bin/sh -ex
+    pip3 install pykwalify
+    pykwalify -d ./release-notes.yml -s ./release-notes-schema.yml
