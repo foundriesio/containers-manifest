@@ -3,7 +3,7 @@ triggers:
   - name: merge-request
     type: gitlab_mr
     runs:
-      - name: unit-test
+      - name: validate-notes
         container: python:3.5-alpine
         host-tag: amd64
         script: unit-test
@@ -14,7 +14,7 @@ triggers:
       GIT_URL: "https://git.foundries.io/development/microplatforms/common/mp-containers"
       GIT_POLL_REFS: "refs/heads/master"
     runs:
-      - name: deploy
+      - name: validate-notes
         container: python:3.5-alpine
         host-tag: amd64
         script: unit-test
