@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <remote fetch="https://git.foundries.io/development/microplatforms/linux" name="fio-mp"/>
+
+  <default remote="fio-mp" revision="master" sync-j="4"/>
+
+  <project name="core-containers" revision="c1210bf5971f37b162156d95b92eacdfdd0e3e30"/>
+  <project name="extra-containers" revision="8ed7fc11e4e4ff8825174a725bc5b956f5e202a6"/>
+  <project name="gateway-containers" revision="0c9787bd8c8aaf7834c52779f1f5cfa2727953a6"/>
+</manifest>

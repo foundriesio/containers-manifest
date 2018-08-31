@@ -1,0 +1,24 @@
+- update: "0.XX"
+  highlights:
+    - This is the first update with the microPlatform containers split out of the Linux microPlatform.
+  summary: |
+    The various microPlatform container projects have been moved out of the
+    Linux microPlatform and into their own product where changes can be better
+    highlighted.
+  parts:
+    - name: microPlatform Containers
+      summary: |
+        Nothing changed.
+      projects:
+        - name: Core Containers
+          manifest_project: core-containers
+          #features:
+          #  - heading: Updated to version XXX of hawkbit
+          #    summary: |
+          #      Moved to new version of hawkbit that does neat things
+        - name: Gateway Containers
+          manifest_project: gateway-containers
+          #features:
+          #  - heading: Updated to version XXX of bt-joiner
+          #    summary: |
+          #      Updated bt-joiner with new IPSP logic
