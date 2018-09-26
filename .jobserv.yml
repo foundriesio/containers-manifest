@@ -11,7 +11,7 @@ triggers:
   - name: post-merge
     type: git_poller
     params:
-      GIT_URL: "https://git.foundries.io/development/microplatforms/common/mp-containers"
+      GIT_URL: "https://git.foundries.io/development/microplatforms/common/containers-manifest"
       GIT_POLL_REFS: "refs/heads/master"
     runs:
       - name: validate-notes
@@ -26,3 +26,4 @@ scripts:
     #!/bin/sh -ex
     pip3 install pykwalify
     pykwalify -d ./release-notes.yml -s ./release-notes-schema.yml
+    cp default.xml /archive/manifest.pinned.xml
