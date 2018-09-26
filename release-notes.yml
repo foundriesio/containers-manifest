@@ -1,4 +1,4 @@
-- update: "0.XX"
+- update: "0.30"
   highlights:
     - This is the first update with the microPlatform containers split out of the Linux microPlatform.
   summary: |
@@ -8,17 +8,26 @@
   parts:
     - name: microPlatform Containers
       summary: |
-        Nothing changed.
+        The READMEs in each project have been cleaned up and now show up on
+        https://hub.foundries.io/ when viewing a container.
       projects:
         - name: Core Containers
           manifest_project: core-containers
-          #features:
-          #  - heading: Updated to version XXX of hawkbit
-          #    summary: |
-          #      Moved to new version of hawkbit that does neat things
+          features:
+            - heading: hawkbit-update-server updated to 0.2.1
+              summary: |
+                The hawbit-update-server is now based on the latest upstream
+                version and includes a patch to allow anonymous access. This
+                is *not* intended to be used in a production setting.
         - name: Gateway Containers
           manifest_project: gateway-containers
-          #features:
-          #  - heading: Updated to version XXX of bt-joiner
-          #    summary: |
-          #      Updated bt-joiner with new IPSP logic
+          features:
+            - heading: ibm-bluemix-mosquitto moved to extra-containers
+              summary: |
+                The ibm-bluemix-mosquitto container is only used for
+                demonstration purposes.
+            - heading: cf-proxy-coap-http moved to alpine:latest
+              summary: |
+                The container was moved to use alpine:latest so it can follow
+                a more active/maintained upstream. Two unused packages, wget
+                ca-certificates were removed as well.
