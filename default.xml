@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <manifest>
-  <remote fetch="https://git.foundries.io/development/microplatforms/linux" name="fio-mp"/>
-
-  <default remote="fio-mp" revision="master" sync-j="4"/>
-
-  <project name="core-containers" revision="169bb813ab60fad2be95456b61a64c074c915f54"/>
-  <project name="extra-containers" revision="363d2a9ee310df20dcf56e7e93d9b4214968bcac"/>
-  <project name="gateway-containers" revision="a0ae4c7f5563382edcd12ce3c33f1394095a6c85"/>
+  <remote fetch="https://source.foundries.io" name="subscriber-microplatforms" />
+  
+  <default remote="subscriber-microplatforms" revision="master" sync-j="4" />
+  
+  <project name="core-containers" remote="subscriber-microplatforms" revision="169bb813ab60fad2be95456b61a64c074c915f54" />
+  <project name="extra-containers" remote="subscriber-microplatforms" revision="363d2a9ee310df20dcf56e7e93d9b4214968bcac" />
+  <project name="gateway-containers" remote="subscriber-microplatforms" revision="a0ae4c7f5563382edcd12ce3c33f1394095a6c85" />
 </manifest>
