@@ -7,7 +7,8 @@
   parts:
     - name: microPlatform Containers
       summary: |
-        TODO
+        All core containers are now based on the upstream Alpine latest(3.8)
+        image.
       projects:
         - name: Core Containers
           manifest_project: core-containers
@@ -17,6 +18,14 @@
                  The aktualizr container is based on Alpine 3.8 using a
                  multi-stage build pipeline to make things smaller and
                  easier to build.
+            - heading: Leshan based on Alpine 3.8
+              summary: |
+                 The Leshan LWM2M container is now based on Alpine as a part
+                 of our move to use a common base container image.
+            - heading: Hawkbit-update-server based on Alpine 3.8
+              summary: |
+                 The hawkbit-update-server container is now based on Alpine
+                 as a part of our move to use a common base container image.
         - name: Gateway Containers
           manifest_project: gateway-containers
           #features:
