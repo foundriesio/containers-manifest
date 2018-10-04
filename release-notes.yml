@@ -1,3 +1,31 @@
+- update: "0.31"
+  highlights:
+    - The "aktualizr" container has been based on Alpine
+  summary: |
+    The "aktualizr" container has been based on Alpine reducing the image size
+    from about 300MB to 150MB
+  parts:
+    - name: microPlatform Containers
+      summary: |
+        TODO
+      projects:
+        - name: Core Containers
+          manifest_project: core-containers
+          features:
+            - heading: aktaulizr based on Alpine 3.8
+              summary: |
+                 The aktualizr container is based on Alpine 3.8 using a
+                 multi-stage build pipeline to make things smaller and
+                 easier to build.
+        - name: Gateway Containers
+          manifest_project: gateway-containers
+          #features:
+          #  - heading: ibm-bluemix-mosquitto moved to extra-containers
+          #    summary: |
+          #      The ibm-bluemix-mosquitto container is only used for
+          #      demonstration purposes.
+
+
 - update: "0.30"
   highlights:
     - This is the first update with the microPlatform containers split out of the Linux microPlatform.
