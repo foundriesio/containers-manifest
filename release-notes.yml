@@ -1,6 +1,7 @@
 - update: "0.31"
   highlights:
     - The "aktualizr" container has been based on Alpine
+    - All core containers are based on the upstream Alpine 3.8(latest) release
   summary: |
     The "aktualizr" container has been based on Alpine reducing the image size
     from about 300MB to 150MB
@@ -8,7 +9,7 @@
     - name: microPlatform Containers
       summary: |
         All core containers are now based on the upstream Alpine latest(3.8)
-        image.
+        image that includes a few CVE fixes.
       projects:
         - name: Core Containers
           manifest_project: core-containers
@@ -26,13 +27,46 @@
               summary: |
                  The hawkbit-update-server container is now based on Alpine
                  as a part of our move to use a common base container image.
+          bug_fixes:
+            - heading: libjpeg-turbo
+              summary: |
+                Two bug fixes were applied to address issues unlikely to affect
+                any of the container's paths of execution.
+              cves:
+                - 2018-11813
+                - 2018-1152
+            - heading: libx11
+              summary: |
+                Three bug fixes were applied to address issues unlikely to affect
+                any of the container's paths of execution.
+              cves:
+                - 2018-14600
+                - 2018-14599
+                - 2018-14598
+            - heading: nss
+              summary: |
+                An undisclosed bug fix has been applied to the nss package that's
+                not known to affect any paths of execution.
+              cves:
+                - 2018-12384
+
         - name: Gateway Containers
           manifest_project: gateway-containers
-          #features:
-          #  - heading: ibm-bluemix-mosquitto moved to extra-containers
-          #    summary: |
-          #      The ibm-bluemix-mosquitto container is only used for
-          #      demonstration purposes.
+          bug_fixes:
+            - heading: libx11
+              summary: |
+                Three bug fixes were applied to address issues unlikely to affect
+                any of the container's paths of execution.
+              cves:
+                - 2018-14600
+                - 2018-14599
+                - 2018-14598
+            - heading: nss
+              summary: |
+                An undisclosed bug fix has been applied to the nss package that's
+                not known to affect any paths of execution.
+              cves:
+                - 2018-12384
 
 
 - update: "0.30"
