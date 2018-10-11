@@ -5,6 +5,6 @@
   <default remote="fio-mp" revision="master" sync-j="4"/>
 
   <project name="core-containers" revision="2d4acc4e33ed31972aa332c7d1e8e2e2c3481802"/>
-  <project name="extra-containers" revision="ac63bd83e029c1ac2eb1e91d8b583d79eb58af67"/>
+  <project name="extra-containers" revision="9f777d082ad3264ea2cd7dc9da54ee4fcdf4ec9e"/>
   <project name="gateway-containers" revision="ec4fb71dde789c222151c143c6f4158a26db0dcc"/>
 </manifest>
