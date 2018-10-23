@@ -1,3 +1,21 @@
+- update: "0.32"
+  highlights:
+    - No major changes, just updates to base images.
+  summary: |
+    Containers were not changed, but base images were updated where applicable.
+  parts:
+    - name: microPlatform Containers
+      summary: |
+        The mosquitto container has pulled in updates for package dependencies.
+      projects:
+        - name: Gateway Containers
+          manifest_project: gateway-containers
+          features:
+            - heading: mosquitto base image updated
+              summary: |
+                Some of the base packages from Alpine like musl have been
+                brought up-to-date.
+
 - update: "0.31"
   highlights:
     - The "aktualizr" container has been based on Alpine
