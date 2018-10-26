@@ -15,6 +15,10 @@
               summary: |
                 Some of the base packages from Alpine like musl have been
                 brought up-to-date.
+            - heading: docker-compose.yml improvements
+              summary: |
+                The docker-compose.yml has been updated to work with
+                hub.foundries.io by default.
 
 - update: "0.31"
   highlights:
