@@ -3,7 +3,7 @@
   
   <default remote="subscriber-microplatforms" revision="master" sync-j="4" />
   
-  <project name="core-containers" remote="subscriber-microplatforms" revision="2d4acc4e33ed31972aa332c7d1e8e2e2c3481802" />
-  <project name="extra-containers" remote="subscriber-microplatforms" revision="4c5ca20db563df08272c01da289f5896a4de8b9e" />
-  <project name="gateway-containers" remote="subscriber-microplatforms" revision="ec4fb71dde789c222151c143c6f4158a26db0dcc" />
+  <project name="core-containers" remote="subscriber-microplatforms" revision="549ada6595aeb6cad3bca6a2c38f7b3cde2b1110" />
+  <project name="extra-containers" remote="subscriber-microplatforms" revision="f68541bb9adcaca5a591007ecb2c27be81b09be6" />
+  <project name="gateway-containers" remote="subscriber-microplatforms" revision="b94800ed6a57554a0a11ad00f148bb768fb273a1" />
 </manifest>

@@ -1,3 +1,40 @@
+- update: "0.32"
+  highlights:
+    - No major changes, just updates to base images.
+  summary: |
+    Containers were not changed, but base images were updated where applicable.
+  parts:
+    - name: microPlatform Containers
+      summary: |
+        Alpine base images were applied to all applicable containers.
+      projects:
+        - name: Gateway Containers
+          manifest_project: gateway-containers
+          features:
+            - heading: cf-proxy-coap-http updates
+              summary: |
+                openjdk-jre was updated to 8.181.13-r0
+            - heading: nginx updates
+              summary: |
+                libxml2 as updated to 2.9.8-r1
+            - heading: docker-compose.yml improvements
+              summary: |
+                The docker-compose.yml has been updated to work with
+                hub.foundries.io by default.
+
+        - name: Core Containers
+          manifest_project: core-containers
+          features:
+            - heading: aktualizr updates
+              summary: |
+                openjdk-jre was updated to 8.181.13-r0, libxml2 updated to 2.9.8-r1
+            - heading: hawkbit-update-server updates
+              summary: |
+                openjdk-jre was updated to 8.181.13-r0
+            - heading: leshan updates
+              summary: |
+                openjdk-jre was updated to 8.181.13-r0
+
 - update: "0.31"
   highlights:
     - The "aktualizr" container has been based on Alpine
