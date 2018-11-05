@@ -1,3 +1,20 @@
+- update: "33"
+  highlights:
+    - Alpine package updates to the mosquitto container
+  summary: |
+    The musl library in the mosquitto container was updated to 1.1.20-r2.
+  parts:
+    - name: microPlatform Containers
+      summary: |
+        A few Alpine package updates were applied to the mosquitto container.
+      projects:
+        - name: Gateway Containers
+          manifest_project: gateway-containers
+          features:
+            - heading: musl update
+              summary: |
+                musl updated to 1.1.20-r2
+
 - update: "0.32"
   highlights:
     - No major changes, just updates to base images.
