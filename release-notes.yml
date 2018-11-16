@@ -1,3 +1,44 @@
+- update: "34"
+  highlights:
+    - Routine updates to base Alpine packages
+  summary: |
+    The base Alpine images were updated for all containers.
+  parts:
+    - name: microPlatform Containers
+      summary: |
+        Usability improvements were added to the bt-joiner container making
+        it easier to manage custom configuration options.
+      projects:
+        - name: Core Containers
+          manifest_project: core-containers
+          features:
+            - heading: libcurl update
+              summary: |
+                libcurl updated from 7.61.1-r0 to 7.61.1-r1
+            - heading: lcms2 update
+              summary: |
+                lcms2 updated from 2.9-r0 to 2.9-r1
+
+        - name: Gateway Containers
+          manifest_project: gateway-containers
+          features:
+            - heading: nginx base container update
+              summary: |
+                The nginx container's base image was changed from alpine:3.7
+                to alpine:latest to be consistent with the rest of the
+                gateway containers.
+            - heading: mosquitto base container update
+              summary: |
+                The mosquitto container's base image was changed from alpine:edge
+                to alpine:latest to be consistent with the rest of the
+                gateway containers.
+          bug_fixes:
+            - heading: docker-compose issue fixed for cf-proxy-coap-http
+              summary: |
+                 The docker-compose logic for cf-proxy-coap-http was exposing
+                 the proxy port as TCP rather than UDP which was preventing
+                 ZMP OTAs from working.
+
 - update: "33"
   highlights:
     - Alpine package updates to the mosquitto container
