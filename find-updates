@@ -1,0 +1,67 @@
+#!/usr/bin/python3
+
+import datetime
+import os
+import subprocess
+
+IGNORES = (
+    'ibm-bluemix-mosquitto',
+    'iot-edge',
+    'mqtt-iota',
+    'rtl-ais',
+)
+
+
+def _pull(image):
+    print('= Pulling latest version of %s' % image)
+    subprocess.check_call(['docker', 'pull', image], stdout=subprocess.DEVNULL)
+
+
+def _inspect(image):
+    print('= Looking for package updates to %s' % image)
+    out = subprocess.check_output(
+        ['docker', 'run', '--rm', '--entrypoint', '', image,
+         'apk', '--no-cache', 'version'],
+        stderr=subprocess.DEVNULL)
+
+    updates = []
+    in_headers = True
+    for x in out.decode().splitlines():
+        if not in_headers:
+            updates.append(x)
+        if x.startswith('Installed:'):
+            in_headers = False
+    return updates
+
+
+def main(reg_base):
+    images = [x for x in os.listdir()
+              if os.path.isdir(x) and x != '.git' and x not in IGNORES]
+    print('= Looking at images: %s' % ', '.join(images))
+
+    msg = ''
+    for x in images:
+        img = reg_base + '/' + x
+        _pull(img)
+        updates = _inspect(img)
+        if updates:
+            msg += '\n= %s' % x
+            msg += '\n  ' + '\n  '.join(updates) + '\n'
+
+    if msg:
+        if os.environ.get('COMMIT'):
+            print('Creating empty git commit with changes noted')
+            day = datetime.datetime.utcnow().strftime('%Y-%m-%d')
+            msg = 'Alpine Base Updates: %s\n\n' % day + msg
+            subprocess.check_call(
+                ['git', 'commit', '--signoff', '--allow-empty', '-m', msg])
+        else:
+            print(msg)
+
+    else:
+        print('No updates found')
+
+
+if __name__ == '__main__':
+    reg_base = os.environ.get('REGISTRY_BASE', 'hub.foundries.io')
+    main(reg_base)
