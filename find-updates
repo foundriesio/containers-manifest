@@ -6,9 +6,6 @@ import subprocess
 
 IGNORES = (
     'ibm-bluemix-mosquitto',
-    'iot-edge',
-    'mqtt-iota',
-    'rtl-ais',
 )
 
 
