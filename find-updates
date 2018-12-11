@@ -42,8 +42,8 @@ def main(reg_base):
         _pull(img)
         updates = _inspect(img)
         if updates:
-            msg += '\n= %s' % x
-            msg += '\n  ' + '\n  '.join(updates) + '\n'
+            msg += '\n## %s' % x
+            msg += '\n * ' + '\n * '.join(updates) + '\n'
 
     if msg:
         if os.environ.get('COMMIT'):
