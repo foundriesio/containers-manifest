@@ -1,9 +1,9 @@
 <manifest>
-  <remote fetch="https://github.com/foundriesio" name="subscriber-microplatforms" />
+  <remote fetch="https://github.com/foundriesio" name="fio" />
 
-  <default remote="subscriber-microplatforms" revision="master" sync-j="4" />
+  <default remote="fio" revision="master" sync-j="4" />
 
-  <project name="core-containers" remote="subscriber-microplatforms" revision="96fa74a38458deceb6a9494afcca5eb94d94bed3" />
-  <project name="extra-containers" remote="subscriber-microplatforms" revision="8d6b4e002e8573d7cc35af0b6021b76eafc26246" />
-  <project name="gateway-containers" remote="subscriber-microplatforms" revision="9e66b3ac9377058ed2a40dd75e28ee46904014a0" />
+  <project name="core-containers" revision="96fa74a38458deceb6a9494afcca5eb94d94bed3" />
+  <project name="gateway-containers" revision="9e66b3ac9377058ed2a40dd75e28ee46904014a0" />
+  <project name="extra-containers" revision="8d6b4e002e8573d7cc35af0b6021b76eafc26246" />
 </manifest>
