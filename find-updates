@@ -23,6 +23,52 @@ def _find_base_image(docker_file):
     raise ValueError('Unable to find "FROM" spec in %s' % docker_file)
 
 
+def _docker_find_apk_add(docker_file):
+    # this is a hack that hurts, but its better than nothing. It
+    # tries to guess what APK packages a Dockerfile installs by finding
+    # the last "apk add" command used in a Dockerfile. By the convention
+    # we've used building our containers, this works fairly well
+    with open(docker_file) as f:
+        # We have to read in reverse to deal with multi-stage containers
+        for line in reversed(f.readlines()):
+            if line.startswith('RUN apk add'):
+                cmd = line[4:].strip()
+                if cmd[-1] == '\\':  # Dockerfile multi-line
+                    cmd = cmd[:-1].strip()
+                if cmd[-2:] == '&&':  # probably Dockerfile multi-line command
+                    cmd = cmd[:-2]
+                return cmd
+
+
+def _apk_versions(image, extra_cmd=None):
+    cmd = 'echo EIOIO_VERSIONS && cat /lib/apk/db/installed'
+    if extra_cmd:
+        cmd = extra_cmd + ' && ' + cmd
+    args = [
+        'docker', 'run', '--rm',
+        '--entrypoint=',
+        image,
+        '/bin/sh', '-c', cmd
+    ]
+
+    out = subprocess.check_output(args).decode()
+
+    in_versions = False
+    cur_pkg = None
+    packages = {}
+    for line in out.splitlines():
+        if in_versions:
+            if line.startswith('P:'):
+                cur_pkg = line[2:].strip()
+            elif line.startswith('V:'):
+                assert cur_pkg is not None
+                packages[cur_pkg] = line[2:].strip()
+                cur_pkg = None
+        if line == 'EIOIO_VERSIONS':
+            in_versions = True
+    return packages
+
+
 def _docker_inspect(image):
     fmt = '{{(index .RepoDigests 0)}}\n{{(index .RootFS.Layers 0)}}'
     out = subprocess.check_output(['docker', 'inspect', '-f', fmt, image])
@@ -32,14 +78,32 @@ def _docker_inspect(image):
 def _inspect(docker_file, image):
     print('= Looking for package updates to %s' % image)
     print('  pulling in latest version of base image')
+
+    changes = []
     base_image = _find_base_image(docker_file)
     _pull(base_image)
     base_sha, base_layer = _docker_inspect(base_image)
     _, image_base = _docker_inspect(image)
     if image_base != base_layer:
-        return ['Alpine base image changed to: ' + base_sha]
+        changes.append('Alpine base image changed to: ' + base_sha)
 
-    return []
+    print('  probing package versions current image')
+    cur_versions = _apk_versions(image)
+    print('  detecting package versions if a new image were built')
+    new_versions = _apk_versions(base_image, _docker_find_apk_add(docker_file))
+
+    cur_names = set(cur_versions.keys())
+    new_names = set(new_versions.keys())
+
+    for removed in cur_names - new_names:
+        changes.append('Removed ' + removed)
+    for added in new_names - cur_names:
+        changes.append('Added ' + added)
+    for pkg in cur_names & new_names:
+        if cur_versions[pkg] != new_versions[pkg]:
+            changes.append('Changed %s %s -> %s' % (
+                pkg, cur_versions[pkg], new_versions[pkg]))
+    return changes
 
 
 def main(reg_base):
@@ -59,6 +123,7 @@ def main(reg_base):
     if msg:
         if os.environ.get('COMMIT'):
             print('Creating empty git commit with changes noted')
+            msg = "NOTE: These deltas can change between the commit and the container's build step\n" + msg # NOQA
             day = datetime.datetime.utcnow().strftime('%Y-%m-%d')
             msg = 'Alpine Base Updates: %s\n\n' % day + msg
             subprocess.check_call(
