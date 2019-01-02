@@ -14,21 +14,32 @@ def _pull(image):
     subprocess.check_call(['docker', 'pull', image], stdout=subprocess.DEVNULL)
 
 
-def _inspect(image):
-    print('= Looking for package updates to %s' % image)
-    out = subprocess.check_output(
-        ['docker', 'run', '--rm', '--entrypoint', '', image,
-         'apk', '--no-cache', 'version'],
-        stderr=subprocess.DEVNULL)
+def _find_base_image(docker_file):
+    with open(docker_file) as f:
+        # We have to read in reverse to deal with multi-stage containers
+        for line in reversed(f.readlines()):
+            if line.startswith('FROM'):
+                return line[4:].strip()
+    raise ValueError('Unable to find "FROM" spec in %s' % docker_file)
 
-    updates = []
-    in_headers = True
-    for x in out.decode().splitlines():
-        if not in_headers:
-            updates.append(x)
-        if x.startswith('Installed:'):
-            in_headers = False
-    return updates
+
+def _docker_inspect(image):
+    fmt = '{{(index .RepoDigests 0)}}\n{{(index .RootFS.Layers 0)}}'
+    out = subprocess.check_output(['docker', 'inspect', '-f', fmt, image])
+    return out.strip().decode().splitlines()
+
+
+def _inspect(docker_file, image):
+    print('= Looking for package updates to %s' % image)
+    print('  pulling in latest version of base image')
+    base_image = _find_base_image(docker_file)
+    _pull(base_image)
+    base_sha, base_layer = _docker_inspect(base_image)
+    _, image_base = _docker_inspect(image)
+    if image_base != base_layer:
+        return ['Alpine base image changed to: ' + base_sha]
+
+    return []
 
 
 def main(reg_base):
@@ -40,7 +51,7 @@ def main(reg_base):
     for x in images:
         img = reg_base + '/' + x
         _pull(img)
-        updates = _inspect(img)
+        updates = _inspect(os.path.join(x, 'Dockerfile'), img)
         if updates:
             msg += '\n## %s' % x
             msg += '\n * ' + '\n * '.join(updates) + '\n'
