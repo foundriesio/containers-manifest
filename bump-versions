@@ -1,42 +1,141 @@
 #!/usr/bin/python3
 
 import subprocess
+import sys
 import xml.etree.ElementTree as ET
 
+import requests
 
-def repo_changes(repo, since):
-    changes = ''
-    out = subprocess.check_output(
-        ['git', 'log', '%s..HEAD' % since], cwd='../' + repo).decode()
+JOBSERV_TOKEN = None
 
-    commit = None
-    in_image_update = False
+IGNORES = (
+    'ibm-bluemix-mosquitto',
+)
+
+
+def _pull(image):
+    print('= Pulling latest version of %s' % image)
+    subprocess.check_call(['docker', 'pull', image], stdout=subprocess.DEVNULL)
+
+
+def jobserv_get(url):
+    r = requests.get(url, headers={'OSF-TOKEN': JOBSERV_TOKEN})
+    if r.status_code != 200:
+        sys.exit('Unable to get %s - HTTP_%d:\n%s' % (
+            url, r.status_code, r.text))
+    return r
+
+
+def hub_versions(image):
+    cmd = 'echo EIOIO_VERSIONS && cat /lib/apk/db/installed'
+    args = [
+        'docker', 'run', '--rm',
+        '--entrypoint=',
+        image,
+        '/bin/sh', '-c', cmd
+    ]
+
+    out = subprocess.check_output(args).decode()
+
+    in_versions = False
+    cur_pkg = None
+    packages = {}
     for line in out.splitlines():
-        if line.startswith('commit '):
-            if not commit:
-                commit = line.split()[1]
-            in_image_update = False
-        elif line.startswith('    Alpine Base Updates:'):
-            in_image_update = True
-
-        if in_image_update:
-            line = line[4:]
-            if not line.startswith('Signed-off-by:'):
-                changes += line + '\n'
-
-    return commit, changes
+        if in_versions:
+            if line.startswith('P:'):
+                cur_pkg = line[2:].strip()
+            elif line.startswith('V:'):
+                assert cur_pkg is not None
+                packages[cur_pkg] = line[2:].strip()
+                cur_pkg = None
+        if line == 'EIOIO_VERSIONS':
+            in_versions = True
+    return packages
 
 
-def main():
+def ci_versions(project, image, build_no):
+    url = 'https://api.foundries.io/projects/development/gateway-images/' \
+          'builds/%d/runs/%s-aarch64/%s.packages' % (build_no, project, image)
+
+    cur_pkg = None
+    packages = {}
+    for line in jobserv_get(url).text.splitlines():
+        if line.startswith('P:'):
+            cur_pkg = line[2:].strip()
+        elif line.startswith('V:'):
+            assert cur_pkg is not None
+            packages[cur_pkg] = line[2:].strip()
+            cur_pkg = None
+    return packages
+
+
+def ci_container_images(project, build_no):
+    # look for images that provided a .packages file
+    url = 'https://api.foundries.io/projects/development/gateway-images/' \
+          'builds/%d/runs/%s-aarch64/' % (build_no, project)
+    artifacts = jobserv_get(url).json()['data']['run']['artifacts']
+    for a in artifacts:
+        if a.endswith('.packages'):
+            a = a.split('/')[-1][:-9]
+            if a not in IGNORES:
+                yield a
+
+
+def ci_commit(project, build_no):
+    url = 'https://api.foundries.io/projects/development/gateway-images/' \
+          'builds/%d/runs/%s-aarch64/.rundef.json' % (build_no, project)
+    rundef = jobserv_get(url).json()
+    return rundef['env']['GIT_SHA']
+
+
+def image_changes(project, image, build_no):
+    _pull('hub.foundries.io/' + image)
+    print('  probing package versions current image')
+    cur_versions = hub_versions('hub.foundries.io/' + image)
+    print('  finding new versions from CI artifacts')
+    new_versions = ci_versions(project, image, build_no)
+
+    cur_names = set(cur_versions.keys())
+    new_names = set(new_versions.keys())
+
+    changes = []
+    for removed in cur_names - new_names:
+        changes.append('Removed ' + removed)
+    for added in new_names - cur_names:
+        changes.append('Added ' + added)
+    for pkg in cur_names & new_names:
+        if cur_versions[pkg] != new_versions[pkg]:
+            changes.append('Changed %s %s -> %s' % (
+                pkg, cur_versions[pkg], new_versions[pkg]))
+    return ' * ' + '\n * '.join(changes)
+
+
+def main(args):
     tree = ET.parse('default.xml')
     root = tree.getroot()
 
+    builds = {}
+    if args.core:
+        builds['core'] = args.core
+    if args.gateway:
+        builds['gateway'] = args.gateway
+    if args.extra:
+        builds['extra'] = args.extra
+
     commit_msg = ''
     for p in root.findall('project'):
-        new_sha, changes = repo_changes(p.attrib['name'], p.attrib['revision'])
-        if new_sha:
-            commit_msg += '# %s\n%s\n' % (p.attrib['name'], changes)
-            p.attrib['revision'] = new_sha
+        proj = p.attrib['name'].replace('-containers', '')
+        build = builds.get(proj)
+        if build:
+            changed = False
+            print('= Looking for changes to ' + p.attrib['name'])
+            for image in ci_container_images(proj, build):
+                changes = image_changes(proj, image, build)
+                if changes:
+                    changed = True
+                    commit_msg += '## %s\n%s\n\n' % (p.attrib['name'], changes)
+            if changed:
+                p.attrib['revision'] = ci_commit(proj, build)
 
     if commit_msg:
         tree.write('default.xml')
@@ -46,6 +145,20 @@ def main():
 
 
 if __name__ == '__main__':
+    import argparse
     import os
     os.chdir(os.path.dirname(__file__))
-    main()
+
+    parser = argparse.ArgumentParser('Find changes to containers for release')
+    parser.add_argument('--token', required=True,
+                        help='JobServ token for accessing API')
+    parser.add_argument('--core', type=int,
+                        help='JobServ build of core-containers')
+    parser.add_argument('--gateway', type=int,
+                        help='JobServ build of gateway-containers')
+    parser.add_argument('--extra', type=int,
+                        help='JobServ build of extra-containers')
+
+    args = parser.parse_args()
+    JOBSERV_TOKEN = args.token
+    main(args)
