@@ -88,6 +88,30 @@ def ci_commit(project, build_no):
     return rundef['env']['GIT_SHA']
 
 
+def ci_tests(build_no):
+    url = 'https://api.foundries.io/projects/development/gateway-images/' \
+          'builds/%d/runs/' % (build_no)
+
+    runs = jobserv_get(url).json()['data']['runs']
+    for run in runs:
+        for test in jobserv_get(run['tests']).json()['data']['tests']:
+            test = jobserv_get(test['url']).json()['data']['test']
+            test['name'] = run['name'] + '-' + test['name']
+            yield test
+
+
+def junit(tests):
+    msg = '<testsuite name="unit-tests">\n'
+    for test in tests:
+        for result in test['results']:
+            msg += '<testcase name="%s/%s">\n' % (test['name'], result['name'])
+            if result['status'] != 'PASSED':
+                msg += '<failure></failure>\n'
+            msg += '</testcase>\n'
+    msg += '</testsuite>\n'
+    return msg
+
+
 def image_changes(project, image, build_no):
     _pull('hub.foundries.io/' + image)
     print('  probing package versions current image')
@@ -122,6 +146,7 @@ def main(args):
     if args.extra:
         builds['extra'] = args.extra
 
+    notes = {}
     commit_msg = ''
     for p in root.findall('project'):
         proj = p.attrib['name'].replace('-containers', '')
@@ -136,12 +161,16 @@ def main(args):
                     commit_msg += '## %s\n%s\n\n' % (p.attrib['name'], changes)
             if changed:
                 p.attrib['revision'] = ci_commit(proj, build)
+                notes[p.attrib['name']] = junit(ci_tests(build))
 
     if commit_msg:
         tree.write('default.xml')
         commit_msg = 'Bump container versions\n\n' + commit_msg
         subprocess.check_call(
             ['git', 'commit', '--signoff', 'default.xml', '-m', commit_msg])
+        for proj, msg in notes.items():
+            subprocess.check_call(
+                ['git', 'notes', '--ref', proj, 'add', '-m', msg])
 
 
 if __name__ == '__main__':
