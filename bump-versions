@@ -158,7 +158,8 @@ def main(args):
                 changes = image_changes(proj, image, build)
                 if changes:
                     changed = True
-                    commit_msg += '## %s\n%s\n\n' % (p.attrib['name'], changes)
+                    commit_msg += '## %s/%s\n%s\n\n' % (
+                        p.attrib['name'], image, changes)
             if changed:
                 p.attrib['revision'] = ci_commit(proj, build)
                 notes[p.attrib['name']] = junit(ci_tests(build))
