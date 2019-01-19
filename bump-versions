@@ -54,7 +54,7 @@ def hub_versions(image):
 
 
 def ci_versions(project, image, build_no):
-    url = 'https://api.foundries.io/projects/development/gateway-images/' \
+    url = 'https://api.foundries.io/projects/mp-containers/' \
           'builds/%d/runs/%s-aarch64/%s.packages' % (build_no, project, image)
 
     cur_pkg = None
@@ -71,7 +71,7 @@ def ci_versions(project, image, build_no):
 
 def ci_container_images(project, build_no):
     # look for images that provided a .packages file
-    url = 'https://api.foundries.io/projects/development/gateway-images/' \
+    url = 'https://api.foundries.io/projects/mp-containers/' \
           'builds/%d/runs/%s-aarch64/' % (build_no, project)
     artifacts = jobserv_get(url).json()['data']['run']['artifacts']
     for a in artifacts:
@@ -82,14 +82,14 @@ def ci_container_images(project, build_no):
 
 
 def ci_commit(project, build_no):
-    url = 'https://api.foundries.io/projects/development/gateway-images/' \
+    url = 'https://api.foundries.io/projects/mp-containers/' \
           'builds/%d/runs/%s-aarch64/.rundef.json' % (build_no, project)
     rundef = jobserv_get(url).json()
     return rundef['env']['GIT_SHA']
 
 
 def ci_tests(build_no):
-    url = 'https://api.foundries.io/projects/development/gateway-images/' \
+    url = 'https://api.foundries.io/projects/mp-containers/' \
           'builds/%d/runs/' % (build_no)
 
     runs = jobserv_get(url).json()['data']['runs']
