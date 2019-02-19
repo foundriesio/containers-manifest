@@ -1,0 +1,50 @@
+<testsuite name="unit-tests">
+<testcase name="gateway-aarch64-unit-tests/test-bt-joiner">
+</testcase>
+<testcase name="gateway-aarch64-unit-tests/test-cf-proxy-coap-http">
+</testcase>
+<testcase name="gateway-aarch64-unit-tests/test-dns64">
+</testcase>
+<testcase name="gateway-aarch64-unit-tests/test-mosquitto">
+</testcase>
+<testcase name="gateway-aarch64-unit-tests/test-nat64-tayga">
+</testcase>
+<testcase name="gateway-aarch64-unit-tests/test-nginx">
+</testcase>
+<testcase name="gateway-aarch64-unit-tests/test-ot-wpantund">
+</testcase>
+<testcase name="gateway-aarch64-unit-tests/test-radvd64">
+</testcase>
+<testcase name="gateway-armhf-unit-tests/test-bt-joiner">
+</testcase>
+<testcase name="gateway-armhf-unit-tests/test-cf-proxy-coap-http">
+</testcase>
+<testcase name="gateway-armhf-unit-tests/test-dns64">
+</testcase>
+<testcase name="gateway-armhf-unit-tests/test-mosquitto">
+</testcase>
+<testcase name="gateway-armhf-unit-tests/test-nat64-tayga">
+</testcase>
+<testcase name="gateway-armhf-unit-tests/test-nginx">
+</testcase>
+<testcase name="gateway-armhf-unit-tests/test-ot-wpantund">
+</testcase>
+<testcase name="gateway-armhf-unit-tests/test-radvd64">
+</testcase>
+<testcase name="gateway-amd64-unit-tests/test-bt-joiner">
+</testcase>
+<testcase name="gateway-amd64-unit-tests/test-cf-proxy-coap-http">
+</testcase>
+<testcase name="gateway-amd64-unit-tests/test-dns64">
+</testcase>
+<testcase name="gateway-amd64-unit-tests/test-mosquitto">
+</testcase>
+<testcase name="gateway-amd64-unit-tests/test-nat64-tayga">
+</testcase>
+<testcase name="gateway-amd64-unit-tests/test-nginx">
+</testcase>
+<testcase name="gateway-amd64-unit-tests/test-ot-wpantund">
+</testcase>
+<testcase name="gateway-amd64-unit-tests/test-radvd64">
+</testcase>
+</testsuite>
