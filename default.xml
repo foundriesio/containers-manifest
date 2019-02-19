@@ -3,7 +3,7 @@
 
   <default remote="fio" revision="master" sync-j="4" />
 
-  <project name="core-containers" revision="13a5f36bd97a2877855d018584652ddd5ef53f38" />
-  <project name="gateway-containers" revision="149a336fd0572cd5df7a0f4fcb3dcbdb358970b7" />
-  <project name="extra-containers" revision="67f922ef2669bb9b70f7db3f414caeb46ee1b8cd" />
+  <project name="core-containers" revision="b974e2fca7463cd28e1f18c76af7d1dcfbe72a1a" />
+  <project name="gateway-containers" revision="f4fadb9c14d809c0ee2ac176040e5f1d206da655" />
+  <project name="extra-containers" revision="7a90e198a06d205eeb57ce2b1deeda202db95816" />
 </manifest>
