@@ -1,0 +1,8 @@
+<testsuite name="unit-tests">
+<testcase name="core-aarch64-unit-tests/test-aktualizr">
+</testcase>
+<testcase name="core-armhf-unit-tests/test-aktualizr">
+</testcase>
+<testcase name="core-amd64-unit-tests/test-aktualizr">
+</testcase>
+</testsuite>
