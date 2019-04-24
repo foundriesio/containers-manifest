@@ -1,0 +1,56 @@
+<testsuite name="unit-tests">
+<testcase name="extra-aarch64-unit-tests/test-dump1090">
+</testcase>
+<testcase name="extra-aarch64-unit-tests/test-fluent-bit">
+</testcase>
+<testcase name="extra-aarch64-unit-tests/test-freeboard">
+</testcase>
+<testcase name="extra-aarch64-unit-tests/test-fswebcam">
+</testcase>
+<testcase name="extra-aarch64-unit-tests/test-gpsd">
+</testcase>
+<testcase name="extra-aarch64-unit-tests/test-libcoap">
+</testcase>
+<testcase name="extra-aarch64-unit-tests/test-mcumgr">
+</testcase>
+<testcase name="extra-aarch64-unit-tests/test-repo">
+</testcase>
+<testcase name="extra-aarch64-unit-tests/test-rtl-ais">
+</testcase>
+<testcase name="extra-armhf-unit-tests/test-dump1090">
+</testcase>
+<testcase name="extra-armhf-unit-tests/test-fluent-bit">
+</testcase>
+<testcase name="extra-armhf-unit-tests/test-freeboard">
+</testcase>
+<testcase name="extra-armhf-unit-tests/test-fswebcam">
+</testcase>
+<testcase name="extra-armhf-unit-tests/test-gpsd">
+</testcase>
+<testcase name="extra-armhf-unit-tests/test-libcoap">
+</testcase>
+<testcase name="extra-armhf-unit-tests/test-mcumgr">
+</testcase>
+<testcase name="extra-armhf-unit-tests/test-repo">
+</testcase>
+<testcase name="extra-armhf-unit-tests/test-rtl-ais">
+</testcase>
+<testcase name="extra-amd64-unit-tests/test-dump1090">
+</testcase>
+<testcase name="extra-amd64-unit-tests/test-fluent-bit">
+</testcase>
+<testcase name="extra-amd64-unit-tests/test-freeboard">
+</testcase>
+<testcase name="extra-amd64-unit-tests/test-fswebcam">
+</testcase>
+<testcase name="extra-amd64-unit-tests/test-gpsd">
+</testcase>
+<testcase name="extra-amd64-unit-tests/test-libcoap">
+</testcase>
+<testcase name="extra-amd64-unit-tests/test-mcumgr">
+</testcase>
+<testcase name="extra-amd64-unit-tests/test-repo">
+</testcase>
+<testcase name="extra-amd64-unit-tests/test-rtl-ais">
+</testcase>
+</testsuite>
