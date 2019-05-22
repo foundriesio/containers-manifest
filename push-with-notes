@@ -1,0 +1,4 @@
+#!/bin/sh -e
+
+git push
+git push origin refs/notes/*
