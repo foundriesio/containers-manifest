@@ -10,6 +10,7 @@ JOBSERV_TOKEN = None
 
 IGNORES = (
     'ibm-bluemix-mosquitto',
+    'fluent-bit',
 )
 
 
